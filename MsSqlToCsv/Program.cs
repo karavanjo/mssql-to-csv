@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MsSqlToCsv.utils;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
@@ -18,14 +19,44 @@ namespace MsSqlToCsv
             using (var connection = new SqlConnection(connectionString))
             {   
                 connection.Open();
-                var tables = connection.GetSchema("Tables");
 
-                var tablesNames = new List<string>();
+                var tablesNames = TablesGetter.GetTablesNames(connection);
+                StringBuilder stringBuilder;
 
-                foreach (DataRow tableInfo in connection.GetSchema("Tables").Rows)
+                foreach (var tableName in tablesNames)
                 {
-                    tablesNames.Add(tableInfo["TABLE_NAME"].ToString());
+                    var getAllRowsSql = String.Format("SELECT * FROM {0}", tableName);
+                    var getAllRowsCommand = new SqlCommand(getAllRowsSql, connection);
+
+                    using (SqlDataReader reader = getAllRowsCommand.ExecuteReader())
+                    {
+                        var columnsNames = ColumnsGetter.GetColumnsNames(reader);
+
+                        stringBuilder = new StringBuilder();
+
+                        foreach (var columnName in columnsNames)
+                        {
+                            var value = columnName;
+                            stringBuilder.Append(value.Trim()).Append("\t");
+                        }
+                        stringBuilder.AppendLine();
+
+                        while (reader.Read())
+                        {
+                            
+                            foreach (var columnName in columnsNames)
+                            {
+                                var value = reader[columnName].ToString();
+                                stringBuilder.Append(value.Trim()).Append("\t");
+                            }
+                            stringBuilder.AppendLine();
+                        }
+                    }
+
+                    CsvMaker.Make(connection.Database.ToString(), tableName, stringBuilder);
                 }
+
+                
             }
         }
     }
