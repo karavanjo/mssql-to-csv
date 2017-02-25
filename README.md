@@ -1,2 +1,2 @@
 # mssql-to-csv
-Converting Microsoft SQL Server database to csv file
+.NET console application for converting Microsoft SQL Server database to csv file
