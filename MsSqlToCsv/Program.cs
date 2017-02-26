@@ -14,10 +14,17 @@ namespace MsSqlToCsv
     {
         static void Main(string[] args)
         {
-            var connectionString =  ConfigurationManager.ConnectionStrings["mssql"].ConnectionString;
+            foreach (ConnectionStringSettings connectionStringSetting in ConfigurationManager.ConnectionStrings)
+            {
+                var connectionString = ConfigurationManager.ConnectionStrings[connectionStringSetting.Name].ConnectionString;
+                HandleConnectionString(connectionString);
+            }
+        }
 
+        static void HandleConnectionString(string connectionString)
+        {
             using (var connection = new SqlConnection(connectionString))
-            {   
+            {
                 connection.Open();
 
                 var tablesInfo = TablesGetter.GetTablesInfo(connection);
@@ -43,7 +50,7 @@ namespace MsSqlToCsv
 
                         while (reader.Read())
                         {
-                            
+
                             foreach (var columnName in columnsNames)
                             {
                                 var value = reader[columnName].ToString();
@@ -52,12 +59,12 @@ namespace MsSqlToCsv
                             stringBuilder.AppendLine();
                         }
                     }
-                    
+
                     CsvMaker.Make(tableInfo.TableCatalog, tableInfo.TableType, tableInfo.Name, stringBuilder);
                     Console.WriteLine(tableInfo.TableCatalog + " - " + tableInfo.TableType + " - " + tableInfo.Name);
                 }
 
-                
+
             }
         }
     }
