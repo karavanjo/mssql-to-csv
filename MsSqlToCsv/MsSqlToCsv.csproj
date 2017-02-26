@@ -52,6 +52,7 @@
     <Compile Include="utils\ColumnsGetter.cs" />
     <Compile Include="utils\CsvMaker.cs" />
     <Compile Include="utils\TablesGetter.cs" />
+    <Compile Include="utils\ZipMaker.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

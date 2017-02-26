@@ -64,7 +64,10 @@ namespace MsSqlToCsv
                     Console.WriteLine(tableInfo.TableCatalog + " - " + tableInfo.TableType + " - " + tableInfo.Name);
                 }
 
-
+                if (tablesInfo.Count > 0)
+                {
+                    ZipMaker.Make(tablesInfo[0].TableCatalog);
+                }
             }
         }
     }
