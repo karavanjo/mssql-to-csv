@@ -9,11 +9,11 @@ namespace MsSqlToCsv.utils
 {
     public static class CsvMaker
     {
-        public static void Make(string dbName, string tableName, StringBuilder stringBuilder)
+        public static void Make(string dbName, string tableType, string tableName, StringBuilder stringBuilder)
         {
-            var filePath = String.Format(@"{0}csv\{1}-{2}.csv", 
+            var filePath = String.Format(@"{0}csv\{1}-{2}-{3}.csv", 
                 AppDomain.CurrentDomain.BaseDirectory,
-                dbName, tableName);
+                dbName, tableType, tableName);
 
             FileInfo file = new FileInfo(filePath);
             file.Directory.Create();

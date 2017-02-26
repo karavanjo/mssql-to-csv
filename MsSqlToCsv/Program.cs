@@ -20,12 +20,12 @@ namespace MsSqlToCsv
             {   
                 connection.Open();
 
-                var tablesNames = TablesGetter.GetTablesNames(connection);
+                var tablesInfo = TablesGetter.GetTablesInfo(connection);
                 StringBuilder stringBuilder;
 
-                foreach (var tableName in tablesNames)
+                foreach (var tableInfo in tablesInfo)
                 {
-                    var getAllRowsSql = String.Format("SELECT * FROM {0}", tableName);
+                    var getAllRowsSql = String.Format("SELECT * FROM [{0}]", tableInfo.Name);
                     var getAllRowsCommand = new SqlCommand(getAllRowsSql, connection);
 
                     using (SqlDataReader reader = getAllRowsCommand.ExecuteReader())
@@ -52,8 +52,9 @@ namespace MsSqlToCsv
                             stringBuilder.AppendLine();
                         }
                     }
-
-                    CsvMaker.Make(connection.Database.ToString(), tableName, stringBuilder);
+                    
+                    CsvMaker.Make(tableInfo.TableCatalog, tableInfo.TableType, tableInfo.Name, stringBuilder);
+                    Console.WriteLine(tableInfo.TableCatalog + " - " + tableInfo.TableType + " - " + tableInfo.Name);
                 }
 
                 
