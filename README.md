@@ -1,7 +1,7 @@
 # mssql-to-csv
 .NET console application for converting Microsoft SQL Server database to csv file
 
-1. Open the solution by Visual Studio.
+1. Open the solution by [Visual Studio](https://www.visualstudio.com/).
 2. Change [App.config](https://github.com/karavanjo/mssql-to-csv/blob/master/MsSqlToCsv/App.config) - replace example connection strings to your connection strings.
 3. Run the application.
 4. All tables and views for each database will be exported to directory `Debug` or `Release` in following structure:
